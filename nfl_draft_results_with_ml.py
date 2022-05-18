@@ -12,11 +12,17 @@ Original file is located at
 
 **Introduction**
 
-This notebook contains work geared towards understanding the relationship between the data collected at the NFL Scouting Combine (Combine) and the subsequent NFL Draft (Draft) results for the years ranging from 1987 through 2021 - specifically attempting to predict how Combine data impacts Draft position, round and whether a player who attended the Combinbe was drafted at all. This dataframe was created by hand by searching the internet for the relevant data and munging disparate sources together to build a dataframe.
+This notebook contains work geared towards understanding the relationship between the data collected at the NFL Scouting Combine (Combine) and the subsequent NFL Draft
+(Draft) results for the years ranging from 1987 through 2021 - specifically attempting to predict how Combine data impacts Draft position, round and whether a player 
+who attended the Combinbe was drafted at all. This dataframe was created by hand by searching the internet for the relevant data and munging disparate sources together
+to build a dataframe.
 
-For some background on what the data is, the NFL Scouting Combine is a week-long showcase occurring every February where college football players perform physical and mental tests in front of National Football League coaches, general managers, and scouts. These tests are rigorously measured and recorded.
+For some background on what the data is, the NFL Scouting Combine is a week-long showcase occurring every February where college football players perform physical and 
+mental tests in front of National Football League coaches, general managers, and scouts. These tests are rigorously measured and recorded.
 
-The NFL Draft is an annual event following the Combine where the franchises that make up the NFL select players to join their teams. This work set out to observe how the results of these two events relate and whether any modicum of predictive power can be gained of various aspects of the draft result that might stem from the data collected from the Combine.
+The NFL Draft is an annual event following the Combine where the franchises that make up the NFL select players to join their teams. This work set out to observe how 
+the results of these two events relate and whether any modicum of predictive power can be gained of various aspects of the draft result that might stem from the data 
+collected from the Combine.
 
 **The below code blocks grant access to the CSV file where the data is stored**
 """
@@ -143,7 +149,8 @@ for key, measurement in measurements.items():
     plt.title(f"Box plot of {measurement} (whis=2)")
 plt.show()
 
-"""We have seven features with outliers that warrant handling. We'll winsorize the minimum amount required to eliminate all outliers beyond a whisker value of two. Two was chosen instead of the default 1.5 because the data gathered in this set are rigorously measured and thus even outliers could be considered legitimate data."""
+"""We have seven features with outliers that warrant handling. We'll winsorize the minimum amount required to eliminate all outliers beyond a whisker value of two. 
+Two was chosen instead of the default 1.5 because the data gathered in this set are rigorously measured and thus even outliers could be considered legitimate data."""
 
 winsorize_columns = ['Hand Size', 'Arm Length', '40_Yard', 'Bench Press', 'Broad Jump', 'Shuttle', '3Cone']
 
@@ -172,7 +179,8 @@ for i, col in enumerate(winsorize_columns):
   plt.title(f"Histogram of {'Winsorized ' + col}")
 plt.show()
 
-"""**Now that we've handled the numerical features, we create a new DataFrame with dummy variables for the categorical feature 'POS', which is the position that the player plays and we drop rows with null values which are essentially players who attended the Combine but were not subsequently drafted.**"""
+"""**Now that we've handled the numerical features, we create a new DataFrame with dummy variables for the categorical feature 'POS', which is the position that the 
+player plays and we drop rows with null values which are essentially players who attended the Combine but were not subsequently drafted.**"""
 
 # nfl_drafted DataFrame is used for modeling a binary classification of whether the player was drafted or not
 nfl_drafted = nfl.copy()
@@ -182,7 +190,8 @@ nfl_drop = nfl.copy()
 nfl_drop.dropna(inplace=True)
 position_df = pd.get_dummies(nfl_drop['POS'], drop_first=True)
 
-# Here we are creating a new DataFrame (nfl_pos) by merging the position feature dummy variable DataFrame and the nfl dataframe with the categorical 'POS' feature dropped.
+# Here we are creating a new DataFrame (nfl_pos) by merging the position feature dummy variable DataFrame and the nfl dataframe with the categorical 'POS' feature 
+dropped.
 nfl_pos = nfl.drop(['POS'], axis=1).merge(position_df, left_index=True, right_index=True)
 nfl_pos.dropna(inplace=True)
 nfl_pos.head()
@@ -214,7 +223,8 @@ nfl_predictions = lr.predict(X_test)
 nfl_report = classification_report(y_test, nfl_predictions)
 print(nfl_report)
 
-"""Above we ran a logistic regression multiclass classifier model attempting to predict the round in which the player was drafted. 14.6% accuracy is our result, which is not very good. The accuracy scores among the 5 folds are fairly consistent. We'll see if we can improve this by using different models.
+"""Above we ran a logistic regression multiclass classifier model attempting to predict the round in which the player was drafted. 14.6% accuracy is our result, which 
+is not very good. The accuracy scores among the 5 folds are fairly consistent. We'll see if we can improve this by using different models.
 
 **Random Forest Classifier**
 """
@@ -230,7 +240,9 @@ nfl_predictions = nfl_rf_clf.predict(X_test)
 nfl_report = classification_report(y_test, nfl_predictions)
 print(nfl_report)
 
-"""From the Random Forest Classifier model we get an accuracy score of 17%, which is still not good from a business standpoint, but it is a nearly 17% improvement over the logistic regression model. Viewing the classification report above, we observe that the random forest model performs better at predicting players drafted in the first round than any of the other top 7 rounds (which will soon be relevant).
+"""From the Random Forest Classifier model we get an accuracy score of 17%, which is still not good from a business standpoint, but it is a nearly 17% improvement 
+over the logistic regression model. Viewing the classification report above, we observe that the random forest model performs better at predicting players drafted 
+in the first round than any of the other top 7 rounds (which will soon be relevant).
 
 **Linear Regression Model on draft position**
 """
@@ -242,7 +254,8 @@ results = sm.OLS(Y, X).fit()
 
 results.summary()
 
-"""Running an OLS model to predict draft *position* (as a continuous variable) also does poorly with only 9.2% of the variance explained. This is a difficult dataset for which to achieve high accuracy and predicting a continuous result versus a categorical result naturally will lead to less success.
+"""Running an OLS model to predict draft *position* (as a continuous variable) also does poorly with only 9.2% of the variance explained. This is a difficult dataset 
+for which to achieve high accuracy and predicting a continuous result versus a categorical result naturally will lead to less success.
 
 **We will now focus only on the top 7 rounds for consistency as the modern draft settled on 7 rounds in 1994**
 """
@@ -271,7 +284,8 @@ nfl_predictions = lr.predict(X_test)
 nfl_report = classification_report(y_test, nfl_predictions)
 print(nfl_report)
 
-"""The logistic regression model on the top 7 rounds DataFrame improved by almost 2 percentage points or 12% on a relative basis which is a significant improvement by merely filtering out data points that are not represented consistently throughout the data set.
+"""The logistic regression model on the top 7 rounds DataFrame improved by almost 2 percentage points or 12% on a relative basis which is a significant improvement 
+by merely filtering out data points that are not represented consistently throughout the data set.
 
 **Random Forest**
 """
@@ -287,11 +301,14 @@ nfl_predictions = nfl_rf_clf.predict(X_test)
 nfl_report = classification_report(y_test, nfl_predictions)
 print(nfl_report)
 
-"""As with the full draft round dataset above, the Random Forest classifier performs better than the Logistic Regression model. After removing the less significant higher rounds (8-10), the random forest model does much better at predicting players drafted in the first round than the subsequent rounds.
+"""As with the full draft round dataset above, the Random Forest classifier performs better than the Logistic Regression model. After removing the less significant 
+higher rounds (8-10), the random forest model does much better at predicting players drafted in the first round than the subsequent rounds.
 
 **Drafted or Not Drafted?**
 
-We now transition to a less rigorous, binary classification model where we want to predict if a player who attended the NFL combine was drafted or not. We will use the same features as with the prior models, however we will have almost the full dataset at our disposal because before we dropped all rows where the player was not drafted.
+We now transition to a less rigorous, binary classification model where we want to predict if a player who attended the NFL combine was drafted or not. We will use 
+the same features as with the prior models, however we will have almost the full dataset at our disposal because before we dropped all rows where the player was not 
+drafted.
 """
 
 nfl_drafted.info()
@@ -330,7 +347,8 @@ lr = LogisticRegression(solver='lbfgs')
 lr.fit(X_train, y_train)
 lr.score(X_test, y_test)
 
-"""We get an accuracy score of 63% which is a modest improvement above random chance so the combine data does have some predictive power, though not as much as we'd likely need for it to be impactful in a business sense.
+"""We get an accuracy score of 63% which is a modest improvement above random chance so the combine data does have some predictive power, though not as much as we'd 
+likely need for it to be impactful in a business sense.
 
 **Confusion Matrices for Visual Appeal**
 """
@@ -514,7 +532,10 @@ precision_score(y_test,y_pred)
 
 recall_score(y_test,y_pred)
 
-"""We see from the recall score and from the confusion matrix of the gradient boost model that this model correctly predicts 85% of all observations where the player was drafted and only 40% of the cases where the player was not drafted. Before the gradient boost, we achieved a 63% accuracy score on drafted players from the Logistic Regression - this is encouraging. Additional data could perhaps improve both percentages, but perhaps more easily we could find additional data that might greatly improve the prediction of players not drafted."""
+"""We see from the recall score and from the confusion matrix of the gradient boost model that this model correctly predicts 85% of all observations where the player 
+was drafted and only 40% of the cases where the player was not drafted. Before the gradient boost, we achieved a 63% accuracy score on drafted players from the 
+Logistic Regression - this is encouraging. Additional data could perhaps improve both percentages, but perhaps more easily we could find additional data that might 
+greatly improve the prediction of players not drafted."""
 
 feature_importance = clf.feature_importances_
 
@@ -550,7 +571,8 @@ svc_lin.fit(X_train, y_train)
 print(f"RBF kernel score: {svc_rbf.score(X_test, y_test)}")
 print(f"Linear kernel score: {svc_lin.score(X_test, y_test)}")
 
-"""Above is the SVC model testing for accuracy for the two optimized kernal parameters from the below Grid Search Cross Validation runs. These accuracy numbers achieve the highest values among the binary 'drafted or not drafted' classification models.
+"""Above is the SVC model testing for accuracy for the two optimized kernal parameters from the below Grid Search Cross Validation runs. These accuracy numbers 
+achieve the highest values among the binary 'drafted or not drafted' classification models.
 
 **Grid Search Cross Validation I**
 
@@ -615,7 +637,9 @@ for score in scores:
 # Note the problem is too easy: the hyperparameter plateau is too flat and the
 # output model is the same for precision and recall with ties in quality.
 
-"""The grid search cross validation yielded two different parameter sets for the highest scores for precision and for recall. The difference between the highest and the second highest precision score is significant whereas the values of recall don't differ greatly so the best performing parameter set would be the one yielding the highest precision. Which for the SVC model would be rbf kernel with the largest C value and the smallest gamma value.
+"""The grid search cross validation yielded two different parameter sets for the highest scores for precision and for recall. The difference between the highest and 
+the second highest precision score is significant whereas the values of recall don't differ greatly so the best performing parameter set would be the one yielding the 
+highest precision. Which for the SVC model would be rbf kernel with the largest C value and the smallest gamma value.
 
 **Grid Search Cross validation II**
 
@@ -676,11 +700,18 @@ for score in scores:
 # Note the problem is too easy: the hyperparameter plateau is too flat and the
 # output model is the same for precision and recall with ties in quality.
 
-"""Conveniently, we achieve the highest precision and the highest recall score for the same parameter set according to our grid search cv algorithm for the above gradient boost model. This also provides the highest accuracy, precision and recall of all the models used for binary classification of whether or not a player was drafted.
+"""Conveniently, we achieve the highest precision and the highest recall score for the same parameter set according to our grid search cv algorithm for the above 
+gradient boost model. This also provides the highest accuracy, precision and recall of all the models used for binary classification of whether or not a player was 
+drafted.
 
 # Conclusions
 
-This dataset proved to be poorly predictive of our target variable and there are explanations for that. First, merely measuring physical and mental tests, while helpful for decision makers, are only one factor in the greater scheme of data that determines draft position in the NFL. The one big missing piece to this is productivity and performance on the field in college football, however these elements are more challenging to capture in a dataset such as this. If more time were available to compile this data, I believe a significant improvement could be made in predictive capacity of these models.
+This dataset proved to be poorly predictive of our target variable and there are explanations for that. First, merely measuring physical and mental tests, while 
+helpful for decision makers, are only one factor in the greater scheme of data that determines draft position in the NFL. The one big missing piece to this is 
+productivity and performance on the field in college football, however these elements are more challenging to capture in a dataset such as this. If more time were 
+available to compile this data, I believe a significant improvement could be made in predictive capacity of these models.
 
-The use of GridSearch cross validation on two distinct binary classification models to tune hyperparameters proved helpful in increasing our predictive abilities. The best performing model in aggregate scoring was the Gradient Boost model with a deviance loss function, maximum number of nodes (or max tree depth) of 4 and 100 boosting stages or 'estimators.' Therefore this is the recommended model for this project.
+The use of GridSearch cross validation on two distinct binary classification models to tune hyperparameters proved helpful in increasing our predictive abilities. 
+The best performing model in aggregate scoring was the Gradient Boost model with a deviance loss function, maximum number of nodes (or max tree depth) of 4 and 100 
+boosting stages or 'estimators.' Therefore this is the recommended model for this project.
 """
