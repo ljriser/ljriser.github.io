@@ -1,5 +1,6 @@
-## Featured Data Analytics Projects using Python
+## Landon's Homepage
 
+# Featured Data Analytics Projects with Python
 - [Produce Image Recognition Tool](https://github.com/ljriser/ljriser.github.io/blob/main/fruit_%26_vegetable_recognition_for_automated_transactions.py)
 
 - [Predicting NFL Draft Results](https://github.com/ljriser/ljriser.github.io/blob/main/nfl_draft_results_with_ml.py)
