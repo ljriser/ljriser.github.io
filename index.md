@@ -1,10 +1,10 @@
-## Landon's Homepage
+## Featured Data Analytics Projects using Python
 
 You can use the [editor on GitHub](https://github.com/ljriser/ljriser.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
 
-[Produce Image Recognition Tool](https://github.com/ljriser/ljriser.github.io/blob/main/fruit_%26_vegetable_recognition_for_automated_transactions.py)
+- [Produce Image Recognition Tool](https://github.com/ljriser/ljriser.github.io/blob/main/fruit_%26_vegetable_recognition_for_automated_transactions.py)
 
-[Predicting NFL Draft Results](https://github.com/ljriser/ljriser.github.io/blob/main/nfl_draft_results_with_ml.py)
+- [Predicting NFL Draft Results](https://github.com/ljriser/ljriser.github.io/blob/main/nfl_draft_results_with_ml.py)
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
