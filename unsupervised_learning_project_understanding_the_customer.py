@@ -52,7 +52,8 @@ fileDownloaded = drive.CreateFile({'id': '1d_jkmjLMCo4Rrmdj8A7Vs3aXUVY-LiG-'})
 fileDownloaded.GetContentFile('customers.csv')
 
 """# Intoduction to the Dataset:
-The customer dataset has 7 usable features from which to model and cluster in order to better understand and serve the customer base. There is no ground truth for which to judge clustering accuracy in this dataset, there is only inference and comparison of models to use for gauging effectiveness.
+The customer dataset has 7 usable features from which to model and cluster in order to better understand and serve the customer base. There is no ground truth for 
+which to judge clustering accuracy in this dataset, there is only inference and comparison of models to use for gauging effectiveness.
 
 The features are as follows:
 
@@ -81,7 +82,9 @@ for i, column in enumerate(columns):
     plt.title(f"Histogram of {column}")
 plt.show()
 
-"""Looking at the histograms, we see a balance in both sex and marital status. Age is skewed toward the younger population and education level is dominated by high school educated(1) with an even split between less than high school educated(0) and college educated(2). Graduate school is represented by 3. Income takes on a similar distribution shape to age - a leftward skew, but with a central tendancy still above 100,000 USD. 
+"""Looking at the histograms, we see a balance in both sex and marital status. Age is skewed toward the younger population and education level is dominated by high 
+school educated(1) with an even split between less than high school educated(0) and college educated(2). Graduate school is represented by 3. Income takes on a similar
+distribution shape to age - a leftward skew, but with a central tendancy still above 100,000 USD. 
 Occupation is made up of about 30% unemployed/unskilled workers, 60% skilled employees, and 10% management/self-employed/officer.
 About half of the customers are in small cities, a quarter are from mid-sized cities and a quarter are from big cities.
 """
@@ -117,7 +120,8 @@ plt.yticks([])
 plt.axis('off')
 plt.show()
 
-"""PCA is insufficient to determine clusters for this data set. We can see a set of horizontal striation patterns, but besides the bottom cluster, the rest of the customer data points are difficult to distinguish into discrete clusters. We know that PCA is weak in retaining local similarities and this is an illustration of that.
+"""PCA is insufficient to determine clusters for this data set. We can see a set of horizontal striation patterns, but besides the bottom cluster, the rest of the 
+customer data points are difficult to distinguish into discrete clusters. We know that PCA is weak in retaining local similarities and this is an illustration of that.
 
 **t-SNE**
 """
@@ -140,7 +144,8 @@ plt.show()
 
 print('t-SNE done! Time elapsed: {} seconds'.format(time.time()-time_start))
 
-"""The t-SNE technique is an expected improvement over PCA as we can see more distinct clusters. Increasing perplexity puts more space between individual clusters up until a perplexity value of 60(slightly beyond the suggested range) where it appears we level off.
+"""The t-SNE technique is an expected improvement over PCA as we can see more distinct clusters. Increasing perplexity puts more space between individual clusters 
+up until a perplexity value of 60(slightly beyond the suggested range) where it appears we level off.
 
 **UMAP**
 
@@ -165,7 +170,8 @@ for i, neighbor in enumerate(neighbors):
 plt.show()
 print('UMAP done! Time elapsed: {} seconds'.format(time.time()-time_start))
 
-"""The above figure shows a series of 2-component UMAP representations of our dataset where we sequentially double the value of n_neighbors while holding the other parameters constant. We begin to see a change in the global structure of the data after n_neighbors = 40.
+"""The above figure shows a series of 2-component UMAP representations of our dataset where we sequentially double the value of n_neighbors while holding the other 
+parameters constant. We begin to see a change in the global structure of the data after n_neighbors = 40.
 
 **Iterating on min_dist**
 """
@@ -188,7 +194,9 @@ for i, dist in enumerate(distance):
 plt.show()
 print('UMAP done! Time elapsed: {} seconds'.format(time.time()-time_start))
 
-"""Above we iterate on min_distance (holding other parameters constant) and observe that for the smaller values, we see broader spaced groupings of local similarities and as the value increases we see tighter spaced and larger groupings. A value of 0.5 with n_neighbors set to 40 appears to be the optimal parameter set in terms of visualizing the clusters and balancing the preservation of local and global structure of the broader dataset.
+"""Above we iterate on min_distance (holding other parameters constant) and observe that for the smaller values, we see broader spaced groupings of local similarities
+and as the value increases we see tighter spaced and larger groupings. A value of 0.5 with n_neighbors set to 40 appears to be the optimal parameter set in terms of 
+visualizing the clusters and balancing the preservation of local and global structure of the broader dataset.
 
 # Clustering
 
@@ -219,7 +227,10 @@ plt.xlabel('Number of K-means Clusters')
 plt.ylabel('Silhouette Score')
 plt.show()
 
-"""The plot above shows that at 30 clusters we cease to gain meaningful improvement in silhouette score by modeling additional clusters. This is an important visual as it suggests that we might best break our customer set into (at most) 30 distinct groups from which to evaluate and target according to their number, habits, needs, etc. to better serve them and ultimately increase sales. We reach the highest Silhouette score at 50 clusters, but the difference in score by adding 20 more clusters is negligible and these additional 20 clusters might not tell us anything about our customer base.
+"""The plot above shows that at 30 clusters we cease to gain meaningful improvement in silhouette score by modeling additional clusters. This is an important visual 
+as it suggests that we might best break our customer set into (at most) 30 distinct groups from which to evaluate and target according to their number, habits, needs, 
+etc. to better serve them and ultimately increase sales. We reach the highest Silhouette score at 50 clusters, but the difference in score by adding 20 more clusters 
+is negligible and these additional 20 clusters might not tell us anything about our customer base.
 
 **Heirachrical Clustering**
 """
@@ -253,7 +264,10 @@ print(f"Silhouette score of linkage method(complete): {metrics.silhouette_score(
 print(f"Silhouette score of linkage method(average): {metrics.silhouette_score(X_std, clusters_average, metric='euclidean')}")
 print(f"Silhouette score of linkage method(ward): {metrics.silhouette_score(X_std, clusters_ward, metric='euclidean')}")
 
-"""Based on the Silhouette scores from the K-means clustering algorithm indicating 30 clusters is optimal, we ran the AgglomerativeClustering algorithm at 30 clusters for the three linkage methods as an initial trial and found it to be the optimal parameter in terms of scoring. The best Silhouette score of the three linkage methods comes from the Ward method. The Ward method dendogram depicts a relatively uniform cluster size distribution when compared to the other two linkage methods. This is a common result for the Ward method.
+"""Based on the Silhouette scores from the K-means clustering algorithm indicating 30 clusters is optimal, we ran the AgglomerativeClustering algorithm at 30 clusters 
+for the three linkage methods as an initial trial and found it to be the optimal parameter in terms of scoring. The best Silhouette score of the three linkage methods
+comes from the Ward method. The Ward method dendogram depicts a relatively uniform cluster size distribution when compared to the other two linkage methods. This is a 
+common result for the Ward method.
 
 **DBSCAN Clustering**
 
@@ -279,7 +293,10 @@ for value in samples:
   clusters = dbscan_cluster.fit_predict(X_std)
   print(f"The silhouette score of the DBSCAN solution(min_samples={value}): {metrics.silhouette_score(X_std, clusters, metric='euclidean')}")
 
-"""The above loops iterate across ranges of eps and min_samples to find optimal values. The highest silhouette score obtained is with eps=1 and min_samples=2. We will plot the 2-D visual of this parameter combination below. The DBSCAN algorithm, while providing the highest Silhoutee score, is not ideal for our goal with this project as it divides the datapoints in to too many groups. For our business purpose of wanting to identify unique customer groups and what attributes they posses, subdividing our 2000 customers into 80+ groups would leave us unfocused in our ability to better target their needs as that is too granular to be effective."""
+"""The above loops iterate across ranges of eps and min_samples to find optimal values. The highest silhouette score obtained is with eps=1 and min_samples=2. We will 
+plot the 2-D visual of this parameter combination below. The DBSCAN algorithm, while providing the highest Silhoutee score, is not ideal for our goal with this project
+as it divides the datapoints in to too many groups. For our business purpose of wanting to identify unique customer groups and what attributes they posses, subdividing
+our 2000 customers into 80+ groups would leave us unfocused in our ability to better target their needs as that is too granular to be effective."""
 
 # Defining the agglomerative clustering
 dbscan_cluster = DBSCAN(eps=1, min_samples=2, metric='euclidean')
@@ -305,9 +322,12 @@ plt.show()
 print("The silhouette score of the DBSCAN solution: {}"
       .format(metrics.silhouette_score(X_std, clusters, metric='euclidean')))
 
-"""The 2-D representation of the clusters suggests 81 unique clusters from our 2,000 observation dataset. This seems pretty granular when you consider that it is a customer dataset with 7 features. Each cluster would be made up of an average of 25 customers. 
+"""The 2-D representation of the clusters suggests 81 unique clusters from our 2,000 observation dataset. This seems pretty granular when you consider that it is a 
+customer dataset with 7 features. Each cluster would be made up of an average of 25 customers. 
 
-According to the Silhouette score, this DBSCAN model is the best one yet as it outperforms the best K-means and Heirarchical models. That being said, we know that Silhouette score as our only metric can mislead us, and reconciling 80 distinct clusters in a customer set of 2,000 would be impractical to implement in a business sense so for this reason we will focus on other algorithms for best practice modeling.
+According to the Silhouette score, this DBSCAN model is the best one yet as it outperforms the best K-means and Heirarchical models. That being said, we know that 
+Silhouette score as our only metric can mislead us, and reconciling 80 distinct clusters in a customer set of 2,000 would be impractical to implement in a business 
+sense so for this reason we will focus on other algorithms for best practice modeling.
 
 **Gaussian Mixture Models Clustering**
 """
@@ -349,7 +369,10 @@ plt.yticks([])
 plt.axis('off')
 plt.show()
 
-"""The geometry independence that GMM models serves it well in that it handles non-linearity well. The GMM algorithm with 40 components scores similarly to the other algorithms in the 0.42 range for Silhouette score. Visualizing the clusters above, GMM does a pretty effective job at clustering with tis dataset as the discreet numbers can be seen tightly grouped together in large part. The clusters tend to bunch and overlap - particularly in the middle of the plot which leaves something to be desired.
+"""The geometry independence that GMM models serves it well in that it handles non-linearity well. The GMM algorithm with 40 components scores similarly to the other 
+algorithms in the 0.42 range for Silhouette score. Visualizing the clusters above, GMM does a pretty effective job at clustering with tis dataset as the discreet 
+numbers can be seen tightly grouped together in large part. The clusters tend to bunch and overlap - particularly in the middle of the plot which leaves something to 
+be desired.
 
 # Selecting the Best Algorithm and Understanding our Customer Groups
 
@@ -383,9 +406,16 @@ for i, feature in enumerate(features):
 
 plt.show()
 
-"""The above bar graphs summarize the mean feature value of each individual K-means cluster allowing the analyst to build profiles on the clusters on how best to make business changes according to customer tendencies of the various groups.
+"""The above bar graphs summarize the mean feature value of each individual K-means cluster allowing the analyst to build profiles on the clusters on how best to make 
+business changes according to customer tendencies of the various groups.
 
 # Summary
 
-In this work we evaluated a customer dataset without ground truth by employing a comprehensive set of clustering algorithms and dimensionality reduction techniques that allowed us to converge on a seemingly reasonable breakdown of its constituents into 'like' groups. Among the 2000 observations, or customers, we achieve the best statistical scores when they are subdivided into 30 to 40 subgroups. On average, each subgroup would have 50-65 customers in it from which to tailor marketing strategy, physical accomodations and other considerations. Gathering further data on this customer set like shopping and spending history could further improve the effort to develop solutions for improving customer service, inventory, marketing and ultimately sales. The 30 K-means clusters model was chosen for its performance and practicality in understanding the customer base to better target groups and their potential purchasing preferences and how best to market both prodcuts and select appropriate marketing mediums.
+In this work we evaluated a customer dataset without ground truth by employing a comprehensive set of clustering algorithms and dimensionality reduction techniques 
+that allowed us to converge on a seemingly reasonable breakdown of its constituents into 'like' groups. Among the 2000 observations, or customers, we achieve the best 
+statistical scores when they are subdivided into 30 to 40 subgroups. On average, each subgroup would have 50-65 customers in it from which to tailor marketing strategy,
+physical accomodations and other considerations. Gathering further data on this customer set like shopping and spending history could further improve the effort to 
+develop solutions for improving customer service, inventory, marketing and ultimately sales. The 30 K-means clusters model was chosen for its performance and 
+practicality in understanding the customer base to better target groups and their potential purchasing preferences and how best to market both prodcuts and select 
+appropriate marketing mediums.
 """
