@@ -3,6 +3,8 @@
 
 - [Predicting NFL Draft Results](https://github.com/ljriser/ljriser.github.io/blob/main/nfl_draft_results_with_ml.py)
 
+- [Clustering Customers (without Ground Truth)](https://github.com/ljriser/ljriser.github.io/blob/main/unsupervised_learning_project_understanding_the_customer.py)
+
 
 You can use the [editor on GitHub](https://github.com/ljriser/ljriser.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
 
