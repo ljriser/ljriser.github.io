@@ -4,7 +4,7 @@ You can use the [editor on GitHub](https://github.com/ljriser/ljriser.github.io/
 
 [Produce Image Recognition Tool](https://github.com/ljriser/ljriser.github.io/blob/main/fruit_%26_vegetable_recognition_for_automated_transactions.py)
 
-[Predicting NFL Draft Results]([https://github.com/ljriser/ljriser.github.io/blob/main/fruit_%26_vegetable_recognition_for_automated_transactions.py](https://github.com/ljriser/ljriser.github.io/blob/main/nfl_draft_results_with_ml.py))
+[Predicting NFL Draft Results](https://github.com/ljriser/ljriser.github.io/blob/main/nfl_draft_results_with_ml.py)
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
